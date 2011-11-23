@@ -5,7 +5,7 @@ class chiliproject::data {
   $packages     = [ 'ruby', 'postgresql-server-dev-8.4', 'libmagick9-dev' ]
   $git_revision = present
   $language     = 'en'
-  $ignores      = [ '.git', 'database.yml', 'configuration.yml' ]
+  $ignores      = [ '.git*', '.hg*', 'database.yml', 'configuration.yml' ]
   $bin_path     = '/usr/bin:/bin:/opt/puppet/bin:/var/lib/gems/1.8/bin'
   $db_adapter   = 'postgresql'
   $db_name      = 'chiliproject'
