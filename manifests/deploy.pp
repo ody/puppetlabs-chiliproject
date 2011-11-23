@@ -13,7 +13,7 @@
 class chiliproject::deploy(
   $path        = $chiliproject::data::path,
   $staging_dir = $chiliproject::data::staging_dir,
-  $ignores     = $chiliproject::data::ignores,
+  $ignores     = $chiliproject::data::ignores
 ) {
 
   file { 'chiliproject_live_installation':
