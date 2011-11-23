@@ -30,7 +30,7 @@ class chiliproject::configuration(
 
   file { 'chiliproject_configuration':
     path    => "${path}/config/configuration.yml",
-    source  => 'puppet:///modules/chiliproject/config/configuration.yml',
+    source  => template('chiliproject/config/configuration.yml.erb'),
     require => Class['chiliproject::repo'],
     before  => Class['chiliproject::deploy'],
   }

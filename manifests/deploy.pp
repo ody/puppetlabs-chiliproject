@@ -11,20 +11,33 @@
 # Sample Usage:
 #
 class chiliproject::deploy(
-  $path = $chiliproject::data::path
+  $path        = $chiliproject::data::path,
+  $staging_dir = $chiliproject::data::staging_dir,
+  $ignores     = $chiliproject::data::ignores,
+  $bin_path    = $chiliproject::data::bin_path,
+  $language    = $chiliproject::data::language
 ) {
+
+  file { 'chiliproject_live_installation':
+    ensure    => directory,
+    path      => $path,
+    source    => $staging_dir,
+    recurse   => true,
+    ignore    => $ignores,
+    subscribe => Class['chiliproject::repo'],
+  }
 
   exec { 'chiliproject_bundle_install':
     command     => 'bundle install --without=test mysql mysql2 sqlite openid',
-    path        => '/usr/bin:/bin:/opt/puppet/bin:/var/lib/gems/1.8/bin',
+    path        => $bin_path,
     cwd         => $path,
     refreshonly => true,
-    subscribe   => Class['chiliproject::repo'],
+    subscribe   => File['chiliproject_live_installation'],
   }
 
   exec { 'chiliproject_migrate':
     command     => 'bundle exec rake db:migrate',
-    path        => '/usr/bin:/bin:/opt/puppet/bin:/var/lib/gems/1.8/bin',
+    path        => $bin_path,
     environment => 'RAILS_ENV=production',
     cwd         => $path,
     refreshonly => true,
@@ -34,7 +47,7 @@ class chiliproject::deploy(
 
   exec { 'gen_session_store':
     command     => 'bundle exec rake generate_session_store',
-    path        => '/usr/bin:/bin:/opt/puppet/bin:/var/lib/gems/1.8/bin',
+    path        => $bin_path,
     environment => 'RAILS_ENV=production',
     cwd         => $path,
     creates     => "${path}/config/initializers/session_store.rb",
@@ -43,8 +56,8 @@ class chiliproject::deploy(
 
   exec { 'default_data':
     command     => 'bundle exec rake redmine:load_default_data',
-    path        => '/usr/bin:/bin:/opt/puppet/bin:/var/lib/gems/1.8/bin',
-    environment => [ 'REDMINE_LANG=en', 'RAILS_ENV=production' ],
+    path        => $bin_path,
+    environment => [ "REDMINE_LANG=${language}", 'RAILS_ENV=production' ],
     cwd         => $path,
     require     => [ Class['chiliproject::repo'], Exec['chiliproject_migrate'] ],
   }

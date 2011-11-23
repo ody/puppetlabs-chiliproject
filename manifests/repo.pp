@@ -11,8 +11,8 @@
 # Sample Usage:
 #
 class chiliproject::repo(
-  $staging_dir = $chiliproject::data::staging_dir,
-  $repo_source = $chiliproject::data::repo_source,
+  $staging_dir  = $chiliproject::data::staging_dir,
+  $repo_source  = $chiliproject::data::repo_source,
   $git_revision = $chiliproject::data::git_revision
 ) {
 
@@ -28,7 +28,6 @@ class chiliproject::repo(
     ensure   => $git_revision,
     source   => $repo_source,
     provider => 'git',
-    require  => Class['chiliproject'],
+    require  => Class['chiliproject::packages'],
   }
-
 }
