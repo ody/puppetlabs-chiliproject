@@ -21,6 +21,7 @@ class chiliproject::repo(
     owner  => 'root',
     group  => 'root',
     mode   => '0600',
+    require  => Class['chiliproject::packages'],
   }
 
   vcsrepo { 'chiliproject_repo':
@@ -28,6 +29,6 @@ class chiliproject::repo(
     ensure   => $git_revision,
     source   => $repo_source,
     provider => 'git',
-    require  => Class['chiliproject::packages'],
+    require  => File[$staging_dir],
   }
 }
