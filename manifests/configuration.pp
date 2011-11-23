@@ -23,14 +23,14 @@ class chiliproject::configuration(
 
   file { 'chiliproject_database_config':
     path    => "${path}/config/database.yml",
-    source  => template('chiliproject/config/database.yml.erb'),
+    content => template('chiliproject/config/database.yml.erb'),
     require => Class['chiliproject::repo'],
     before  => Class['chiliproject::deploy'],
   }
 
   file { 'chiliproject_configuration':
     path    => "${path}/config/configuration.yml",
-    source  => template('chiliproject/config/configuration.yml.erb'),
+    content => template('chiliproject/config/configuration.yml.erb'),
     require => Class['chiliproject::repo'],
     before  => Class['chiliproject::deploy'],
   }
