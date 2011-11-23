@@ -25,7 +25,7 @@ class chiliproject::repo(
   }
 
   vcsrepo { 'chiliproject_repo':
-    path     => $staging_dir,
+    path     => "${staging_dir}/chiliproject",
     ensure   => $git_revision,
     source   => $repo_source,
     provider => 'git',

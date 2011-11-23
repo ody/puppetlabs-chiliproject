@@ -19,7 +19,7 @@ class chiliproject::deploy(
   file { 'chiliproject_live_installation':
     ensure    => directory,
     path      => $path,
-    source    => $staging_dir,
+    source    => "${staging_dir}/chiliproject",
     recurse   => true,
     ignore    => $ignores,
     subscribe => Class['chiliproject::repo'],
