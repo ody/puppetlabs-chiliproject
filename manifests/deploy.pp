@@ -1,20 +1,45 @@
-# Class: chiliproject::deploy
+# == Class: chiliproject::deploy
 #
-#   Deploys and migrates the chiliproject that is stored in Git repo.
+# Deploys and migrates the chiliproject that is stored in Git repo.
 #
-# Parameters:
+# === Parameters
 #
-# Actions:
+# Document parameters here.
 #
-# Requires:
+# [*ntp_servers*]
+#   Explanation of what this parameter affects and what it defaults to.
+#   e.g. "Specify one or more upstream ntp servers as an array."
 #
-# Sample Usage:
+# === Variables
+#
+# Here you should define a list of variables that this module would require.
+#
+# [*enc_ntp_servers*]
+#   Explanation of how this variable affects the funtion of this class and if it
+#   has a default. e.g. "The parameter enc_ntp_servers must be set by the
+#   External Node Classifier as a comma separated list of hostnames." (Note,
+#   global variables should not be used in preference to class parameters  as of
+#   Puppet 2.6.)
+#
+# === Examples
+#
+#  class { 'example_class':
+#    ntp_servers => [ 'pool.ntp.org', 'ntp.local.company.com' ]
+#  }
+#
+# === Authors
+#
+# Author Name <author@domain.com>
+#
+# === Copyright
+#
+# Copyright 2011 Your name here, unless otherwise noted.
 #
 class chiliproject::deploy(
   $path     = $chiliproject::data::path,
-  $port     = 3000,
-  $pid_file = "$path/tmp/pids/passenger.$port.pid",
-  $user     = "puppet"
+  $port     = '3000',
+  $pid_file = "${path}/tmp/pids/passenger.${port}.pid",
+  $user     = 'puppet'
 ) {
 
   exec { 'chiliproject_bundle_install':
@@ -51,11 +76,11 @@ class chiliproject::deploy(
     cwd         => $path,
     require     => Exec['chiliproject_migrate']
   }
-  
+
   file { "$path/vendor":
     ensure  => directory,
     recurse => true,
-    source  => 'puppet:///modules/chiliproject/vendor' 
+    source  => 'puppet:///modules/chiliproject/vendor'
   }
 
   exec { 'plugins':
@@ -63,7 +88,7 @@ class chiliproject::deploy(
     path        => '/usr/local/bin:/usr/bin:/bin:/opt/puppet/bin:/var/lib/gems/1.8/bin',
     environment => 'RAILS_ENV=production',
     cwd         => $path,
-    require     => File["$path/vendor"]
+    require     => File["${path}/vendor"]
   }
 
   package { 'passenger':
@@ -73,11 +98,11 @@ class chiliproject::deploy(
   }
 
   exec { 'passenger':
-    command     => "passenger start --port $port --pid-file $pid_file --user $user --daemonize",
-    creates     => "$pid_file",
+    command     => "passenger start --port ${port} --pid-file ${pid_file} --user ${user} --daemonize",
+    creates     => $pid_file,
     path        => '/usr/local/bin:/usr/bin:/bin:/opt/puppet/bin:/var/lib/gems/1.8/bin',
     environment => 'RAILS_ENV=production',
     cwd         => $path,
-    require     => [File["$path/vendor"], Package['passenger']]
+    require     => [File["${path}/vendor"], Package['passenger']]
   }
 }
