@@ -19,9 +19,12 @@
 #   Where we pull the clean copy of the Chiliproject down to before we make
 #   modifications to its default configurations.
 #
+# [*port*]
+#   Default HTTP port that our Chiliproject instance will run on.
+#
 # [*git_revision*]
 #   The Chiliproject is stored in an upstream Git repository, we default to
-#   HEAD of master.  This is the present value for the Git provider to vcsrepo.
+#   HEAD of master.
 #
 # [*language*]
 #   English is the default here since that is the language we speek.
@@ -88,7 +91,8 @@ class chiliproject::data {
   $path            = '/var/www/html/chiliproject'
   $repo_source     = 'https://github.com/chiliproject/chiliproject.git'
   $staging_dir     = '/var/opt/lib/pe-puppet/staging'
-  $git_revision    = present
+  $port            = '3000'
+  $git_revision    = 'master'
   $language        = 'en'
   $ignores         = [ '.git', 'database.yml', 'configuration.yml' ]
   $db_adapter      = 'postgresql'
@@ -98,10 +102,6 @@ class chiliproject::data {
   $db_user         = 'chiliproject'
   $db_password     = 'my_password'
   $db_encoding     = 'utf8'
-  $email_address   = 'smtp.googlemail.com'
-  $email_domain    = 'smtp.googlemail.com'
-  $email_user_name = 'example@gmail.com'
-  $email_password  = 'test'
   $email_tls       = 'true'
   $email_starttls  = 'true'
   $email_port      = '587'

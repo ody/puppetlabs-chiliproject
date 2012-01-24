@@ -1,44 +1,34 @@
 # == Class: chiliproject
 #
-# Starting point for installing chiliproject.
-#
-# === Parameters
-#
-# Document parameters here.
-#
-# [*ntp_servers*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# Starting point for installing chiliproject.  The current state of this module
+# makes assumptions about platform, Ubuntu Lucid 10.04 or Debian Squeeze.  More
+# platforms coming soon with added pluggability.
 #
 # === Variables
 #
-# Here you should define a list of variables that this module would require.
-#
-# [*enc_ntp_servers*]
-#   Explanation of how this variable affects the funtion of this class and if it
-#   has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should not be used in preference to class parameters  as of
-#   Puppet 2.6.)
+# [*packages*]
+#   An array of package dependancies for Chiliproject to actually install.
+#   Haven't made this a configurable via a parameter since this module is
+#   currently rather restrictive in platform.
 #
 # === Examples
 #
-#  class { 'example_class':
-#    ntp_servers => [ 'pool.ntp.org', 'ntp.local.company.com' ]
-#  }
+# include chiliproject
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Daniel Sauble <djsauble@puppetlabs.com>
+# Cody Herriges <cody@puppetlabs.com>
 #
 # === Copyright
 #
-# Copyright 2011 Your name here, unless otherwise noted.
+# Copyright 2011 Puppet Labs
 #
 class chiliproject {
   include chiliproject::data
 
-  $packages = [ 'ruby', 'postgresql', 'postgresql-client', 'postgresql-server-dev-8.4', 'libmagick9-dev' ]
+  $packages = [ 'ruby', 'postgresql', 'postgresql-client',
+                'postgresql-server-dev-8.4', 'libmagick9-dev' ]
   package { $packages:
     ensure => present,
   }

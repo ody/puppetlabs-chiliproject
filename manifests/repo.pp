@@ -4,36 +4,31 @@
 #
 # === Parameters
 #
-# Document parameters here.
+# [*user*]
+#   User that the Chiliproject ticket tracker will run as.
 #
-# [*ntp_servers*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# [*staging_dir*]
+#   Where we pull the clean copy of the Chiliproject down to before we make
+#   modifications to its default configurations.
 #
-# === Variables
+# [*repo_source*]
+#   The upstream location we obtain the Chiliproject code from.
 #
-# Here you should define a list of variables that this module would require.
-#
-# [*enc_ntp_servers*]
-#   Explanation of how this variable affects the funtion of this class and if it
-#   has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should not be used in preference to class parameters  as of
-#   Puppet 2.6.)
+# [*git_revision*]
+#   The Chiliproject is stored in an upstream Git repository.
 #
 # === Examples
 #
-#  class { 'example_class':
-#    ntp_servers => [ 'pool.ntp.org', 'ntp.local.company.com' ]
-#  }
+#  include 'chiliproject::repo'
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Daniel Sauble <djsauble@puppetlabs.com>
+# Cody Herriges <cody@puppetlabs.com>
 #
 # === Copyright
 #
-# Copyright 2011 Your name here, unless otherwise noted.
+# Copyright 2011 Puppet Labs
 #
 class chiliproject::repo(
   $user         = $chiliproject::data::user,

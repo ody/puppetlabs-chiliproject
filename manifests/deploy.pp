@@ -1,45 +1,40 @@
 # == Class: chiliproject::deploy
 #
-# Deploys and migrates the chiliproject that is stored in Git repo.
+# Deploys and migrates the chiliproject that is stored in a staged Git repo.
 #
 # === Parameters
 #
-# Document parameters here.
+# [*user*]
+#   User that the Chiliproject ticket tracker will run as.
 #
-# [*ntp_servers*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# [*path*]
+#   Location for the functional copy of Chiliproject on the file system.
 #
-# === Variables
+# [*port*]
+#   HTTP port that our Chiliproject instance will run on.
 #
-# Here you should define a list of variables that this module would require.
-#
-# [*enc_ntp_servers*]
-#   Explanation of how this variable affects the funtion of this class and if it
-#   has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should not be used in preference to class parameters  as of
-#   Puppet 2.6.)
+# [*pid_file*]
+#   Stored PID of a running passenger process that is service the Chiliproject
+#   instance.
 #
 # === Examples
 #
-#  class { 'example_class':
-#    ntp_servers => [ 'pool.ntp.org', 'ntp.local.company.com' ]
-#  }
+#  include chiliproject::deploy
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Daniel Sauble <djsauble@puppetlabs.com>
+# Cody Herriges <cody@puppetlabs.com>
 #
 # === Copyright
 #
-# Copyright 2011 Your name here, unless otherwise noted.
+# Copyright 2011 Puppet Labs
 #
 class chiliproject::deploy(
+  $user     = $chiliproject::data::user,
   $path     = $chiliproject::data::path,
-  $port     = '3000',
+  $port     = $chiliproject::data::port,
   $pid_file = "${path}/tmp/pids/passenger.${port}.pid",
-  $user     = 'puppet'
 ) {
 
   exec { 'chiliproject_bundle_install':
@@ -77,7 +72,7 @@ class chiliproject::deploy(
     require     => Exec['chiliproject_migrate']
   }
 
-  file { "$path/vendor":
+  file { "${path}/vendor":
     ensure  => directory,
     recurse => true,
     source  => 'puppet:///modules/chiliproject/vendor'
@@ -94,7 +89,7 @@ class chiliproject::deploy(
   package { 'passenger':
     provider    => 'gem',
     name        => 'passenger',
-    ensure      => 'latest'
+    ensure      => 'present'
   }
 
   exec { 'passenger':
