@@ -11,7 +11,10 @@
 #   Location for the functional copy of Chiliproject on the file system.
 #
 # [*db_adapter*]
-#   Our choice adapter for rails to use to communicate with our backend database.
+#   Our choice adapter for rails to use to communicate with our backend
+#   it isn't currently a gcood idea to actually change this until the bundle
+#   install in the deploy class it dynamically selecting what not to install.
+#   It currently hard setting the exclusion of sqlite and mysql.
 #
 # [*db_name*]
 #   The name of our Chiliproject database.

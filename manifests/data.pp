@@ -75,7 +75,7 @@
 #
 # === Examples
 #
-# include chiliproject::data
+# include 'chiliproject::data'
 #
 # === Authors
 #
